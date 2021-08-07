@@ -1,6 +1,7 @@
 package io.getarrays.userservice.service;
 
 import io.getarrays.userservice.model.Role;
+import io.getarrays.userservice.model.RoleEnum;
 import io.getarrays.userservice.model.User;
 import io.getarrays.userservice.repo.RoleRepo;
 import io.getarrays.userservice.repo.UserRepo;
@@ -26,16 +27,16 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Role saveRole(Role role) {
-    log.info("Saving new role {} to the database", role.getName());
+    log.info("Saving new role {} to the database", role.getRoleEnum());
     return roleRepo.save(role);
 
   }
 
   @Override
-  public void addRoleToUser(String username, String roleName) {
-    log.info("Adding role {} to user {}", roleName, username);
+  public void addRoleToUser(String username, RoleEnum roleEnum) {
+    log.info("Adding role {} to user {}", roleEnum, username);
     User user = userRepo.findByUsername(username);
-    Role role = roleRepo.findByName(roleName);
+    Role role = roleRepo.findByRoleEnum(roleEnum);
     user.getRoles().add(role);
   }
 

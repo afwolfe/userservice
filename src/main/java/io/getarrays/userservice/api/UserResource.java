@@ -1,6 +1,7 @@
 package io.getarrays.userservice.api;
 
 import io.getarrays.userservice.model.Role;
+import io.getarrays.userservice.model.RoleEnum;
 import io.getarrays.userservice.model.User;
 import io.getarrays.userservice.service.UserService;
 import java.net.URI;
@@ -40,7 +41,7 @@ public class UserResource {
 
   @PostMapping("/role/addtouser")
   public ResponseEntity<Role> addRoleToUser(@RequestBody RoleToUserForm form) {
-    userService.addRoleToUser(form.getUsername(), form.getRoleName());
+    userService.addRoleToUser(form.getUsername(), form.getRoleEnum());
     return ResponseEntity.ok().build();
   }
 
@@ -49,5 +50,5 @@ public class UserResource {
 @Data
 class RoleToUserForm {
   private String username;
-  private String roleName;
+  private RoleEnum roleEnum;
 }
