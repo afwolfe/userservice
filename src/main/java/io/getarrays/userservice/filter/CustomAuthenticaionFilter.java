@@ -26,8 +26,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Slf4j
 public class CustomAuthenticaionFilter extends UsernamePasswordAuthenticationFilter {
 
-  private final int ACCESS_EXPIRATION_TIME = 1000 * 60 * 10;
-  private final int REFRESH_EXPIRATION_TIME = ACCESS_EXPIRATION_TIME * 3;
+  public final static int ACCESS_EXPIRATION_TIME = 1000 * 60 * 10;
+  public final static int REFRESH_EXPIRATION_TIME = ACCESS_EXPIRATION_TIME * 3;
 
   private AuthenticationManager authenticationManager;
 
@@ -61,8 +61,6 @@ public class CustomAuthenticaionFilter extends UsernamePasswordAuthenticationFil
         .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION_TIME))
         .withIssuer(request.getRequestURL().toString())
         .sign(algorithm);
-    response.setHeader("access_token", accessToken);
-    response.setHeader("refresh_token", refreshToken);
     Map<String, String> tokens = new HashMap<>();
     tokens.put("access_token", accessToken);
     tokens.put("refresh_token", refreshToken);
