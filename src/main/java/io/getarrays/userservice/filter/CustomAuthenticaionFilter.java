@@ -29,18 +29,20 @@ public class CustomAuthenticaionFilter extends UsernamePasswordAuthenticationFil
   public final static int ACCESS_EXPIRATION_TIME = 1000 * 60 * 10;
   public final static int REFRESH_EXPIRATION_TIME = ACCESS_EXPIRATION_TIME * 3;
 
-  private AuthenticationManager authenticationManager;
+  private final AuthenticationManager authenticationManager;
 
   public CustomAuthenticaionFilter(AuthenticationManager authenticationManager) {
     this.authenticationManager = authenticationManager;
   }
+
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request,
       HttpServletResponse response) throws AuthenticationException {
     String username = request.getParameter("username");
     String password = request.getParameter("password");
     log.info("Logging in username: {}", username);
-    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
+    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+        username, password);
     return authenticationManager.authenticate(authToken);
   }
 
@@ -53,8 +55,9 @@ public class CustomAuthenticaionFilter extends UsernamePasswordAuthenticationFil
         .withSubject(user.getUsername())
         .withExpiresAt(new Date(System.currentTimeMillis() + ACCESS_EXPIRATION_TIME))
         .withIssuer(request.getRequestURL().toString())
-        .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(
-            Collectors.toList()))
+        .withClaim("roles",
+            user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(
+                Collectors.toList()))
         .sign(algorithm);
     String refreshToken = JWT.create()
         .withSubject(user.getUsername())

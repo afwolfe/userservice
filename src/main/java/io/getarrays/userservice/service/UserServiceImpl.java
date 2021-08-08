@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 @Transactional
 @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
+
   private final UserRepo userRepo;
   private final RoleRepo roleRepo;
 
@@ -35,8 +36,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     if (user == null) {
       log.error("User not found in database");
       throw new UsernameNotFoundException("User not found in the database");
-    }
-    else {
+    } else {
       log.info("User found in database: {}", username);
     }
 
@@ -46,7 +46,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
       authorities.add(new SimpleGrantedAuthority(roleStr));
     }
 
-    return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+    return new org.springframework.security.core.userdetails.User(user.getUsername(),
+        user.getPassword(), authorities);
   }
 
   @Override

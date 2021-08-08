@@ -115,6 +115,7 @@ public class UserResource {
 
 @Data
 class RoleToUserForm {
+
   private String username;
   private RoleEnum roleEnum;
 }

@@ -30,10 +30,10 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
-    if (request.getServletPath().equals("/api/login") || request.getServletPath().equals("/api/token/refresh")) {
+    if (request.getServletPath().equals("/api/login") || request.getServletPath()
+        .equals("/api/token/refresh")) {
       filterChain.doFilter(request, response);
-    }
-    else {
+    } else {
       String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
       if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
         try {
@@ -45,11 +45,12 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
           String username = decodedJWT.getSubject();
           String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
           Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-          for (String role: roles) {
+          for (String role : roles) {
             log.debug("Role: {}", role);
-            authorities.add( new SimpleGrantedAuthority(role));
+            authorities.add(new SimpleGrantedAuthority(role));
           }
-          UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);
+          UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+              username, null, authorities);
           SecurityContextHolder.getContext().setAuthentication(authenticationToken);
           filterChain.doFilter(request, response);
         } catch (Exception e) {
@@ -62,8 +63,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
           response.setContentType(APPLICATION_JSON_VALUE);
           new ObjectMapper().writeValue(response.getOutputStream(), error);
         }
-      }
-      else {
+      } else {
         filterChain.doFilter(request, response);
 
       }
